@@ -169,7 +169,7 @@ def train(
         )
     ).__get__(model, type(model))
 
-    device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
+    device = torch.device("cuda:0") if torch.cuda.is_available() else torch.device("cpu")
     model.to(device)
 
     if torch.__version__ >= "2" and sys.platform != "win32":

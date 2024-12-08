@@ -10,10 +10,7 @@ import os
 os.environ['TRANSFORMERS_CACHE'] = '.cache/huggingface/transformers/'
 ACCESS_TOKEN = "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"
 
-if torch.cuda.is_available():
-    device = "cuda"
-else:
-    device = "cpu"
+device = torch.device("cuda:0") if torch.cuda.is_available() else torch.device("cpu")
 
 
 def main(model_name="final_model", 
