@@ -36,7 +36,6 @@ def main(model_name="final_model",
                 torch_dtype=torch.float16,
             )
         else : 
-            model_path = model_name
             base_model = "yahma/llama-7b-hf"
                 # Base 모델과 토크나이저 로드
             model = LlamaForCausalLM.from_pretrained(
@@ -47,7 +46,7 @@ def main(model_name="final_model",
             tokenizer.pad_token = tokenizer.eos_token
 
             # Prefix Tuning Config 로드
-            prefix_config = PrefixTuningConfig.from_pretrained(model_path)
+            prefix_config = PrefixTuningConfig.from_pretrained(model_name)
 
             # Prefix Tuning이 적용된 모델 로드
             model = get_peft_model(model, prefix_config)
