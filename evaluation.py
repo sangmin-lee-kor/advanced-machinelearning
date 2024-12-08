@@ -59,6 +59,7 @@ def main(model_name="final_model",
         model = PeftModel.from_pretrained(
             model,
         )
+    torch.cuda.empty_cache()
 
     model.config.pad_token_id = tokenizer.pad_token_id = 0  # unk
     model.config.bos_token_id = 1
@@ -69,7 +70,6 @@ def main(model_name="final_model",
     if torch.__version__ >= "2" and sys.platform != "win32":
         model = torch.compile(model)
 
-    torch.cuda.empty_cache()
     generation_config = GenerationConfig(
             temperature=temperature,
             top_p=top_p,
