@@ -22,8 +22,8 @@ def train(
     cutoff_len: int = 256,
     val_set_size: int = 0,
     # lora hyperparams
-    lora_r: int = 8,
-    lora_alpha: int = 16,
+    lora_r: int = 16,
+    lora_alpha: int = 32,
     lora_dropout: float = 0.05,
     lora_target_modules: List[str] = [
         "q_proj",
@@ -72,7 +72,7 @@ def train(
             base_model,
             torch_dtype=torch.float16, use_auth_token=ACCESS_TOKEN
         )
-    tokenizer = LlamaTokenizer.from_pretrained(base_model, use_auth_token=ACCESS_TOKEN)
+    tokenizer = LlamaTokenizer.from_pretrained(base_model, use_auth_token=ACCESS_TOKEN, tokenizer_class=LlamaTokenizer,)
     tokenizer.pad_token_id = (
         0  # unk. we want this to be different from the eos token
     )
