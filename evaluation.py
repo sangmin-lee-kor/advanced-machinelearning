@@ -24,42 +24,35 @@ def main(model_name="final_model",
         max_new_tokens=128
         ) :
     
-    if device == "cuda:0":
-        if prefix_config is None :
-            
-            tokenizer = AutoTokenizer.from_pretrained(model_name, tokenizer_class=LlamaTokenizer,use_auth_token=ACCESS_TOKEN, use_fast=False)
-            model = LlamaForCausalLM.from_pretrained(
-                model_name,
-                torch_dtype=torch.float16,use_auth_token=ACCESS_TOKEN
-            )
-            model = PeftModel.from_pretrained(
-                model,
-                lora_checkpoint,
-                torch_dtype=torch.float16,
-            )
-        else : 
-            base_model = "yahma/llama-7b-hf"
-                # Base 모델과 토크나이저 로드
-            model = LlamaForCausalLM.from_pretrained(
-                base_model, 
-                torch_dtype=torch.float16, 
-                device_map="auto")
-            tokenizer = LlamaTokenizer.from_pretrained(base_model)
-            tokenizer.pad_token = tokenizer.eos_token
-
-            # Prefix Tuning Config 로드
-            prefix_config = PrefixTuningConfig.from_pretrained(model_name)
-
-            # Prefix Tuning이 적용된 모델 로드
-            model = get_peft_model(model, prefix_config)
-
-    else:
+    if prefix_config is None :
+        
+        tokenizer = AutoTokenizer.from_pretrained(model_name, tokenizer_class=LlamaTokenizer,use_auth_token=ACCESS_TOKEN, use_fast=False)
         model = LlamaForCausalLM.from_pretrained(
-            model_name, low_cpu_mem_usage=False
+            model_name,
+            torch_dtype=torch.float16,use_auth_token=ACCESS_TOKEN
         )
         model = PeftModel.from_pretrained(
             model,
+            lora_checkpoint,
+            torch_dtype=torch.float16,
         )
+    else : 
+        base_model = "yahma/llama-7b-hf"
+            # Base 모델과 토크나이저 로드
+        model = LlamaForCausalLM.from_pretrained(
+            base_model, 
+            torch_dtype=torch.float16, 
+            device_map="auto")
+        tokenizer = LlamaTokenizer.from_pretrained(base_model)
+        tokenizer.pad_token = tokenizer.eos_token
+
+        # Prefix Tuning Config 로드
+        prefix_config = PrefixTuningConfig.from_pretrained(model_name)
+
+        # Prefix Tuning이 적용된 모델 로드
+        model = get_peft_model(model, prefix_config)
+
+
     torch.cuda.empty_cache()
 
     model.config.pad_token_id = tokenizer.pad_token_id = 0  # unk
