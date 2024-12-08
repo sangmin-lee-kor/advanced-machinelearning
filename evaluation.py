@@ -24,7 +24,7 @@ def main(model_name="final_model",
         max_new_tokens=128
         ) :
     
-    if device == "cuda":
+    if device == "cuda:0":
         if prefix_config is None :
             
             tokenizer = AutoTokenizer.from_pretrained(model_name, tokenizer_class=LlamaTokenizer,use_auth_token=ACCESS_TOKEN, use_fast=False)
