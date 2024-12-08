@@ -3,7 +3,7 @@ import json
 
 
 res_list = []
-model_list = ["final_model/BaseModel", "final_model/LoRA"]
+model_list = ["final_model/BaseModel", "final_model/LoRA", "final_model/PreFixTuning"]
 for i in model_list :
     res_list.append(evaluation.main(model_name=i))
 
