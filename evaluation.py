@@ -1,9 +1,7 @@
-import gradio as gr
 import sys
 import torch
-import transformers
-from peft import PeftModel
-from transformers import GenerationConfig, LlamaForCausalLM, LlamaTokenizer, AutoModelForSequenceClassification
+from peft import PeftModel, PrefixTuningConfig, get_peft_model
+from transformers import GenerationConfig, LlamaForCausalLM, LlamaTokenizer
 from tqdm import tqdm
 import math
 from datasets import load_dataset
@@ -16,7 +14,8 @@ else:
 
 
 def main(model_name="final_model", 
-        lora_checkpoint="./mycheckpoint/checkpoint-12", 
+        lora_checkpoint=None, 
+        prefix_config=None,
         data_path="train_data_copy.json",
         temperature=0.1,
         top_p=0.75,
@@ -26,14 +25,33 @@ def main(model_name="final_model",
         ) :
     tokenizer = LlamaTokenizer.from_pretrained(model_name)
     if device == "cuda":
-        model = LlamaForCausalLM.from_pretrained(
-            model_name,
-            torch_dtype=torch.float16
-        )
-        model = PeftModel.from_pretrained(
-            model,
-            torch_dtype=torch.float16,
-        )
+        if prefix_config is None :
+            model = LlamaForCausalLM.from_pretrained(
+                model_name,
+                torch_dtype=torch.float16
+            )
+            model = PeftModel.from_pretrained(
+                model,
+                lora_checkpoint,
+                torch_dtype=torch.float16,
+            )
+        else : 
+            model_path = model_name
+            base_model = "yahma/llama-7b-hf"
+                # Base 모델과 토크나이저 로드
+            model = LlamaForCausalLM.from_pretrained(
+                base_model, 
+                torch_dtype=torch.float16, 
+                device_map="auto")
+            tokenizer = LlamaTokenizer.from_pretrained(base_model)
+            tokenizer.pad_token = tokenizer.eos_token
+
+            # Prefix Tuning Config 로드
+            prefix_config = PrefixTuningConfig.from_pretrained(model_path)
+
+            # Prefix Tuning이 적용된 모델 로드
+            model = get_peft_model(model, prefix_config)
+
     else:
         model = LlamaForCausalLM.from_pretrained(
             model_name, low_cpu_mem_usage=False
@@ -59,7 +77,8 @@ def main(model_name="final_model",
             num_beams=num_beams,
             num_return_sequences=num_beams,
             do_sample=True
-        )
+    )
+
     data = load_dataset("json", data_files=data_path)
 
     evaluation(data, model_name, tokenizer, model, generation_config)
