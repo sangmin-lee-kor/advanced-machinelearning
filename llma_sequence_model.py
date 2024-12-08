@@ -1,3 +1,5 @@
+import os
+os.environ['TRANSFORMERS_CACHE'] = '.cache/huggingface/transformers/'
 from transformers import TrainingArguments, Trainer, LlamaForCausalLM, LlamaTokenizer, DataCollatorForSeq2Seq, AutoTokenizer
 from peft import get_peft_config, LoraConfig, get_peft_model, get_peft_model_state_dict
 import torch
@@ -5,7 +7,6 @@ from typing import List
 import fire
 import sys
 from datasets import load_dataset
-import os
 
 ACCESS_TOKEN = "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"
 

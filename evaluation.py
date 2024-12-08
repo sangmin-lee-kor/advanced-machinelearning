@@ -1,3 +1,5 @@
+import os
+os.environ['TRANSFORMERS_CACHE'] = '.cache/huggingface/transformers/'
 import sys
 import torch
 from peft import PeftModel, PrefixTuningConfig, get_peft_model
@@ -5,9 +7,7 @@ from transformers import GenerationConfig, LlamaForCausalLM, LlamaTokenizer, Aut
 from tqdm import tqdm
 import math
 from datasets import load_dataset
-import os
 
-os.environ['TRANSFORMERS_CACHE'] = '.cache/huggingface/transformers/'
 ACCESS_TOKEN = "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"
 
 device = torch.device("cuda:0") if torch.cuda.is_available() else torch.device("cpu")

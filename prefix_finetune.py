@@ -1,4 +1,5 @@
 import os
+os.environ['TRANSFORMERS_CACHE'] = '.cache/huggingface/transformers/'
 import json
 import torch
 from transformers import LlamaForCausalLM, LlamaTokenizer, TrainingArguments, Trainer, BitsAndBytesConfig
