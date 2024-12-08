@@ -3,7 +3,7 @@ import json
 
 
 res_list = []
-model_list = ["final_model/BaseModel", "final_model/LoRA", "final_model/PreFixTuning"]
+model_list = ["BaseModel", "LoRA", "PreFixTuning"]
 for i in model_list :
     model_nm = "final_model/" + i
     if i == "BaseModel" :
