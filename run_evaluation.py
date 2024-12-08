@@ -6,7 +6,7 @@ os.environ['TRANSFORMERS_CACHE'] = '.cache/huggingface/transformers/'
 
 
 res_list = []
-model_list = ["BaseModel", "LoRA", "PreFixTuning"]
+model_list = ["BaseModel", "PreFixTuning", "LoRA"]
 for i in model_list :
     model_nm = "final_model/" + i
     lora_checkpoint = "final_model/" + i
