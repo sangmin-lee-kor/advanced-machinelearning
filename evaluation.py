@@ -28,7 +28,7 @@ def main(model_name="final_model",
     if device == "cuda":
         if prefix_config is None :
             
-            tokenizer = AutoTokenizer.from_pretrained(model_name, tokenizer_class=LlamaTokenizer,use_auth_token=ACCESS_TOKEN, use_fast=False)
+            tokenizer = AutoTokenizer.from_pretrained(model_name, tokenizer_class=LlamaTokenizer, use_fast=False)
             model = LlamaForCausalLM.from_pretrained(
                 model_name,
                 torch_dtype=torch.float16
