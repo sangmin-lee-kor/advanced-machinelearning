@@ -32,7 +32,6 @@ def main(model_name="final_model",
         )
         model = PeftModel.from_pretrained(
             model,
-            lora_checkpoint,
             torch_dtype=torch.float16,
         )
     else:
