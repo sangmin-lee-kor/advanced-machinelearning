@@ -75,7 +75,6 @@ def train(
     model = LlamaForCausalLM.from_pretrained(
         base_model,
         quantization_config=quantization_config,
-        device_map="auto",
         torch_dtype=torch.float16,
     )
     tokenizer = LlamaTokenizer.from_pretrained(base_model)
