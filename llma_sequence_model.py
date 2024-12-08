@@ -13,7 +13,7 @@ def train(
     # model/data params
     base_model: str = "openlm-research/open_llama_7b",  # the only required argument
     data_path: str = "data/train",
-    output_dir: str = "mycheckpoint",
+    output_dir: str = "checkpoint",
     # training hyperparams
     batch_size: int = 128,#used to be 128
     micro_batch_size: int = 4,
