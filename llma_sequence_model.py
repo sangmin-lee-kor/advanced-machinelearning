@@ -5,11 +5,9 @@ from typing import List
 import fire
 import sys
 from datasets import load_dataset
-from dotenv import load_dotenv
 import os
 
-load_dotenv()
-ACCESS_TOKEN = os.getenv('ACCESS_TOKEN')
+ACCESS_TOKEN = "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"
 
 def train(
     # model/data params
