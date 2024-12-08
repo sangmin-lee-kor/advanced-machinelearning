@@ -1,4 +1,6 @@
 import subprocess
+import os
+
 
 def run_model(command):
     try:
@@ -15,6 +17,8 @@ def run_model(command):
 
 def main():
     # 모델 실행 명령어 리스트
+    os.environ['TRANSFORMERS_CACHE'] = '.cache/huggingface/transformers/'
+
     commands = [
         "python llma_sequence_model.py --base_model='openlm-research/open_llama_7b' --data_path='train_data.json' --output_dir='final_model/BaseModel'",
         "python llma_sequence_model.py --base_model='meta-llama/Llama-3.2-3B-Instruct' --data_path='train_data.json' --output_dir='final_model/LoRA'"  
