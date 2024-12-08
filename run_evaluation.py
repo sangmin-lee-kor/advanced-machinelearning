@@ -6,8 +6,7 @@ res_list = []
 model_list = ["BaseModel", "LoRA", "PreFixTuning"]
 for i in model_list :
     model_nm = "final_model/" + i
-    if i == "BaseModel" :
-        lora_checkpoint = "checkpoint/" + i
+    lora_checkpoint = "checkpoint/" + i
     res_list.append(evaluation.main(model_name=model_nm, lora_checkpoint=lora_checkpoint))
     lora_checkpoint = None
 
