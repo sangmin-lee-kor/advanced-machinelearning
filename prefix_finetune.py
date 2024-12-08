@@ -90,7 +90,7 @@ def train(
 
     model = get_peft_model(model, prefix_config)
 
-    device = torsch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
+    device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
     model.to(device)
 
     # 데이터 토큰화 함수
