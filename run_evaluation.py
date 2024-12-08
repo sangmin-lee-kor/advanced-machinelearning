@@ -1,5 +1,8 @@
 import evaluation
 import json
+import os
+
+os.environ['TRANSFORMERS_CACHE'] = '.cache/huggingface/transformers/'
 
 
 res_list = []
