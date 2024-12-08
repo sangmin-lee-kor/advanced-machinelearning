@@ -1,7 +1,7 @@
 import sys
 import torch
 from peft import PeftModel, PrefixTuningConfig, get_peft_model
-from transformers import GenerationConfig, LlamaForCausalLM, LlamaTokenizer
+from transformers import GenerationConfig, LlamaForCausalLM, LlamaTokenizer, AutoTokenizer
 from tqdm import tqdm
 import math
 from datasets import load_dataset
@@ -23,7 +23,7 @@ def main(model_name="final_model",
         num_beams=4,
         max_new_tokens=128
         ) :
-    tokenizer = LlamaTokenizer.from_pretrained(model_name)
+    tokenizer = AutoTokenizer.from_pretrained(model_name, tokenizer_class=LlamaTokenizer,use_fast=False)
     if device == "cuda":
         if prefix_config is None :
             model = LlamaForCausalLM.from_pretrained(
