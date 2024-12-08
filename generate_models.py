@@ -1,7 +1,6 @@
 import subprocess
 import os
 
-
 def run_model(command):
     try:
         result = subprocess.run(
