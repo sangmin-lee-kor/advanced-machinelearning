@@ -1,4 +1,4 @@
-from transformers import TrainingArguments, Trainer, LlamaForCausalLM, LlamaTokenizer, DataCollatorForSeq2Seq
+from transformers import TrainingArguments, Trainer, LlamaForCausalLM, LlamaTokenizer, DataCollatorForSeq2Seq, AutoTokenizer
 from peft import get_peft_config, LoraConfig, get_peft_model, get_peft_model_state_dict
 import torch
 from typing import List
@@ -72,7 +72,7 @@ def train(
             base_model,
             torch_dtype=torch.float16, use_auth_token=ACCESS_TOKEN
         )
-    tokenizer = LlamaTokenizer.from_pretrained(base_model, use_auth_token=ACCESS_TOKEN, tokenizer_class=LlamaTokenizer,)
+    tokenizer = AutoTokenizer.from_pretrained(base_model, use_auth_token=ACCESS_TOKEN, tokenizer_class=LlamaTokenizer,use_fast=False)
     tokenizer.pad_token_id = (
         0  # unk. we want this to be different from the eos token
     )
