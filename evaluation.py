@@ -33,7 +33,7 @@ def main(model_name="final_model",
             tokenizer = AutoTokenizer.from_pretrained(model_name, tokenizer_class=LlamaTokenizer,use_auth_token=ACCESS_TOKEN, use_fast=False)
             model = LlamaForCausalLM.from_pretrained(
                 model_name,
-                torch_dtype=torch.float16
+                torch_dtype=torch.float16,use_auth_token=ACCESS_TOKEN
             )
             model = PeftModel.from_pretrained(
                 model,
