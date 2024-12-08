@@ -178,6 +178,7 @@ def train(
     trainer.train(resume_from_checkpoint=resume_from_checkpoint)
 
     trainer.save_model(output_dir)
+    tokenizer.save_pretrained(output_dir)
 
 
 def generate_prompt(data_point):
