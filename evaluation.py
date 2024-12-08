@@ -6,6 +6,7 @@ from tqdm import tqdm
 import math
 from datasets import load_dataset
 
+ACCESS_TOKEN = "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"
 
 if torch.cuda.is_available():
     device = "cuda"
@@ -23,9 +24,11 @@ def main(model_name="final_model",
         num_beams=4,
         max_new_tokens=128
         ) :
-    tokenizer = AutoTokenizer.from_pretrained(model_name, tokenizer_class=LlamaTokenizer,use_fast=False)
+    
     if device == "cuda":
         if prefix_config is None :
+            
+            tokenizer = AutoTokenizer.from_pretrained(model_name, tokenizer_class=LlamaTokenizer,use_auth_token=ACCESS_TOKEN, use_fast=False)
             model = LlamaForCausalLM.from_pretrained(
                 model_name,
                 torch_dtype=torch.float16
