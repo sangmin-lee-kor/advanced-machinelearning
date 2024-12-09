@@ -43,7 +43,7 @@ def main(model_name="final_model",
         model = LlamaForCausalLM.from_pretrained(
             base_model, 
             torch_dtype=torch.float16)
-        tokenizer = AutoTokenizer.from_pretrained(base_model)
+        tokenizer = LlamaTokenizer.from_pretrained(base_model)
         tokenizer.pad_token = tokenizer.eos_token
 
         # Prefix Tuning Config 로드
