@@ -158,7 +158,6 @@ def evaluation(data, model_nm, tokenizer, model, generation_config, device) :
         label = cur['output']
         inputs = generate_prompt({**cur, "output": ""})
         inputs = tokenizer(inputs, return_tensors="pt")
-        inputs = {key: value.to(device) for key, value in inputs.items()}
         for key, value in inputs.items():
             print(f"{key}: {value.device}")
 
@@ -167,6 +166,7 @@ def evaluation(data, model_nm, tokenizer, model, generation_config, device) :
 
         for name, buffer in model.named_buffers():
             print(f"Buffer: {name} - {buffer.device}")
+        inputs = {key: value.to(device) for key, value in inputs.items()}
 
 
         input_ids = inputs['input_ids'].to(device)
