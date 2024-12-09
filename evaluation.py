@@ -42,8 +42,7 @@ def main(model_name="final_model",
             # Base 모델과 토크나이저 로드
         model = LlamaForCausalLM.from_pretrained(
             base_model, 
-            torch_dtype=torch.float16, 
-            device_map="auto")
+            torch_dtype=torch.float16)
         tokenizer = AutoTokenizer.from_pretrained(base_model)
         tokenizer.pad_token = tokenizer.eos_token
 
@@ -157,25 +156,24 @@ def evaluation(data, model_nm, tokenizer, model, generation_config, device, num_
     for i, cur in tqdm(enumerate(data['train'])):
         label = cur['output']
         inputs = generate_prompt({**cur, "output": ""})
-        # inputs = tokenizer(inputs, return_tensors="pt")
-        input_ids = tokenizer(inputs, return_tensors="pt").input_ids.to(device)
-        # for key, value in input_ids.items():
-        #     print(f"{key}: {value.device}")
+        inputs = tokenizer(inputs, return_tensors="pt")
+        for key, value in inputs.items():
+            print(f"{key}: {value.device}")
 
-        # for name, param in model.named_parameters():
-        #     print(f"Parameter: {name} - {param.device}")
+        for name, param in model.named_parameters():
+            print(f"Parameter: {name} - {param.device}")
 
-        # for name, buffer in model.named_buffers():
-        #     print(f"Buffer: {name} - {buffer.device}")
-        # inputs = {key: value.to(device) for key, value in inputs.items()}
+        for name, buffer in model.named_buffers():
+            print(f"Buffer: {name} - {buffer.device}")
+        inputs = {key: value.to(device) for key, value in inputs.items()}
 
 
-        # input_ids = inputs['input_ids'].to(device)
+        input_ids = inputs['input_ids'].to(device)
         
         res = []
         print(device)
-        # print("Input IDs device:", inputs["input_ids"].device)
-        # print("Model device:", next(model.parameters()).device)
+        print("Input IDs device:", inputs["input_ids"].device)
+        print("Model device:", next(model.parameters()).device)
 
         with torch.no_grad():
             generation_output = model.generate(
