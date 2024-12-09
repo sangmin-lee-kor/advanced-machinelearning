@@ -169,7 +169,8 @@ def evaluation(data, model_nm, tokenizer, model, generation_config) :
                 max_new_tokens=128,#used to be 128
             )
 
-            for j in range(10):
+            num_sequences = len(generation_output.sequences)
+            for j in range(num_sequences):
                 temp = generation_output.sequences[j]
                 cur = tokenizer.decode(temp,skip_special_tokens=True).split("### Response:")[1].strip()
                 cur = cur.split("⁇")[0].strip()
