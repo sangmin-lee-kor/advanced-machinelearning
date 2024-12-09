@@ -31,14 +31,14 @@ def main(model_name="final_model",
         tokenizer.pad_token = tokenizer.eos_token
         model = LlamaForCausalLM.from_pretrained(
             model_name,
-            torch_dtype=torch.float16,use_auth_token=ACCESS_TOKEN
+            torch_dtype=torch.float16,use_auth_token=ACCESS_TOKEN,
+            ignore_mismatched_sizes=True
         )
         model = PeftModel.from_pretrained(
             model,
             lora_checkpoint,
             torch_dtype=torch.float16,
         )
-        model.load_adapter('adapter-checkpoint', config='adapter-config')
     else : 
         base_model = "yahma/llama-7b-hf"
             # Base 모델과 토크나이저 로드
