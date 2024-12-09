@@ -27,6 +27,7 @@ def main(model_name="final_model",
     if prefix_config is None :
         
         tokenizer = AutoTokenizer.from_pretrained(model_name, tokenizer_class=LlamaTokenizer,use_auth_token=ACCESS_TOKEN, use_fast=False)
+        tokenizer.pad_token = tokenizer.eos_token
         model = LlamaForCausalLM.from_pretrained(
             model_name,
             torch_dtype=torch.float16,use_auth_token=ACCESS_TOKEN
@@ -75,7 +76,7 @@ def main(model_name="final_model",
 
     data = load_dataset("json", data_files=data_path)
 
-    evaluation(data, model_name, tokenizer, model, generation_config)
+    evaluation(data, model_name, tokenizer, model, generation_config, device)
 
 def predict(
         instruction,
@@ -145,7 +146,7 @@ def generate_prompt(instruction, input=None):
 """
     
 
-def evaluation(data, model_nm, tokenizer, model, generation_config) :
+def evaluation(data, model_nm, tokenizer, model, generation_config, device) :
     hit5 = 0
     hit10 = 0
     ndcg5 = 0
@@ -157,7 +158,7 @@ def evaluation(data, model_nm, tokenizer, model, generation_config) :
         label = cur['output']
         inputs = generate_prompt({**cur, "output": ""})
         inputs = tokenizer(inputs, return_tensors="pt")
-        input_ids = inputs['input_ids'].to('cuda:0')
+        input_ids = inputs['input_ids'].to(device)
         
         res = []
         with torch.no_grad():
