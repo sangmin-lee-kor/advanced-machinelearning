@@ -10,15 +10,14 @@ from datasets import load_dataset
 
 ACCESS_TOKEN = "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"
 
-# device = torch.device("cuda:0") if torch.cuda.is_available() else torch.device("cpu")
-device = torch.device("cpu")
-# torch.cuda.set_device(device)
+device = torch.device("cuda:0") if torch.cuda.is_available() else torch.device("cpu")
+torch.cuda.set_device(device)
 
 def main(model_name="final_model", 
         lora_checkpoint=None, 
         prefix_config=None,
         data_path="train_data_copy.json",
-        temperature=0.5,
+        temperature=0.7,
         top_p=0.75,
         top_k=50,
         num_beams=10,
@@ -44,7 +43,7 @@ def main(model_name="final_model",
         model = LlamaForCausalLM.from_pretrained(
             base_model, 
             torch_dtype=torch.float16)
-        tokenizer = LlamaTokenizer.from_pretrained(base_model)
+        tokenizer = AutoTokenizer.from_pretrained(base_model, tokenizer_class=LlamaTokenizer)
         tokenizer.pad_token = tokenizer.eos_token
 
         # Prefix Tuning Config 로드
