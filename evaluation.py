@@ -19,7 +19,7 @@ def main(model_name="final_model",
         prefix_config=None,
         data_path="train_data_copy.json",
         temperature=0.7,
-        top_p=0.95,
+        top_p=0.75,
         top_k=50,
         num_beams=10,
         max_new_tokens=128
@@ -38,6 +38,7 @@ def main(model_name="final_model",
             lora_checkpoint,
             torch_dtype=torch.float16,
         )
+        model.load_adapter('adapter-checkpoint', config='adapter-config')
     else : 
         base_model = "yahma/llama-7b-hf"
             # Base 모델과 토크나이저 로드
@@ -161,7 +162,7 @@ def evaluation(data, model_nm, tokenizer, model, generation_config, device, num_
         label = cur['output']
         cur['output'] = ""
         inputs = generate_prompt(cur["instruction"], cur["input"], model_nm)
-        inputs = tokenizer(inputs, return_tensors="pt")
+        inputs = tokenizer(inputs, return_tensors="pt", padding=True, truncation=True)
         input_ids = inputs['input_ids'].to(device)
         
         res = []
