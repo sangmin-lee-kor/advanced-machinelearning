@@ -44,7 +44,7 @@ def main(model_name="final_model",
             base_model, 
             torch_dtype=torch.float16, 
             device_map="auto")
-        tokenizer = LlamaTokenizer.from_pretrained(base_model)
+        tokenizer = AutoTokenizer.from_pretrained(base_model)
         tokenizer.pad_token = tokenizer.eos_token
 
         # Prefix Tuning Config 로드
