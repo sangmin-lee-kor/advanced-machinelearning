@@ -20,7 +20,7 @@ def main(model_name="final_model",
         temperature=0.1,
         top_p=0.75,
         top_k=40,
-        num_beams=4,
+        num_beams=10,
         max_new_tokens=128
         ) :
     
@@ -76,7 +76,7 @@ def main(model_name="final_model",
 
     data = load_dataset("json", data_files=data_path)
 
-    evaluation(data, model_name, tokenizer, model, generation_config, device)
+    evaluation(data, model_name, tokenizer, model, generation_config, device, num_beams)
 
 def predict(
         instruction,
@@ -146,7 +146,7 @@ def generate_prompt(instruction, input=None):
 """
     
 
-def evaluation(data, model_nm, tokenizer, model, generation_config, device) :
+def evaluation(data, model_nm, tokenizer, model, generation_config, device, num_beams) :
     hit5 = 0
     hit10 = 0
     ndcg5 = 0
@@ -157,8 +157,9 @@ def evaluation(data, model_nm, tokenizer, model, generation_config, device) :
     for i, cur in tqdm(enumerate(data['train'])):
         label = cur['output']
         inputs = generate_prompt({**cur, "output": ""})
-        inputs = tokenizer(inputs, return_tensors="pt")
-        for key, value in inputs.items():
+        # inputs = tokenizer(inputs, return_tensors="pt")
+        input_ids = tokenizer(inputs, return_tensors="pt").input_ids.to(device)
+        for key, value in input_ids.items():
             print(f"{key}: {value.device}")
 
         for name, param in model.named_parameters():
@@ -169,7 +170,7 @@ def evaluation(data, model_nm, tokenizer, model, generation_config, device) :
         inputs = {key: value.to(device) for key, value in inputs.items()}
 
 
-        input_ids = inputs['input_ids'].to(device)
+        # input_ids = inputs['input_ids'].to(device)
         
         res = []
         print(device)
@@ -185,8 +186,7 @@ def evaluation(data, model_nm, tokenizer, model, generation_config, device) :
                 max_new_tokens=128,#used to be 128
             )
 
-            num_sequences = len(generation_output.sequences)
-            for j in range(num_sequences):
+            for j in range(num_beams):
                 temp = generation_output.sequences[j]
                 cur = tokenizer.decode(temp,skip_special_tokens=True).split("### Response:")[1].strip()
                 cur = cur.split("⁇")[0].strip()
