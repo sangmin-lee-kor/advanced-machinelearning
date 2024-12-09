@@ -124,26 +124,29 @@ def predict(
     return output
 
 
-def generate_prompt(instruction, input=None):
-    if input:
-        return f"""Below is an instruction that describes a task, paired with an input that provides further context. Write a response that appropriately completes the request.
+def generate_prompt(instruction, input=None, model_name=None):
+    if model_name != "PreFixTuning" :
+        if input:
+            return f"""Below is an instruction that describes a task, paired with an input that provides further context. Write a response that appropriately completes the request.
 
-### Instruction:
-{instruction}
+    ### Instruction:
+    {instruction}
 
-### Input:
-{input}
+    ### Input:
+    {input}
 
-### Response:
-"""
-    else:
-        return f"""Below is an instruction that describes a task. Write a response that appropriately completes the request.
+    ### Response:
+    """
+        else:
+            return f"""Below is an instruction that describes a task. Write a response that appropriately completes the request.
 
-### Instruction:
-{instruction}
+    ### Instruction:
+    {instruction}
 
-### Response:
-"""
+    ### Response:
+    """
+    else :
+        return f"Instruction: {instruction}\nInput: {input}\n ### Response:"
     
 
 def evaluation(data, model_nm, tokenizer, model, generation_config, device, num_beams) :
@@ -156,7 +159,8 @@ def evaluation(data, model_nm, tokenizer, model, generation_config, device, num_
 
     for i, cur in tqdm(enumerate(data['train'])):
         label = cur['output']
-        inputs = generate_prompt({**cur, "output": ""})
+        cur['output'] = ""
+        inputs = generate_prompt(cur["instruction"], cur["input"], model_nm)
         inputs = tokenizer(inputs, return_tensors="pt")
         input_ids = inputs['input_ids'].to(device)
         
