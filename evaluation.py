@@ -31,8 +31,7 @@ def main(model_name="final_model",
         tokenizer.pad_token = tokenizer.eos_token
         model = LlamaForCausalLM.from_pretrained(
             model_name,
-            torch_dtype=torch.float16,use_auth_token=ACCESS_TOKEN,
-            ignore_mismatched_sizes=True
+            torch_dtype=torch.float16,use_auth_token=ACCESS_TOKEN
         )
         model = PeftModel.from_pretrained(
             model,
