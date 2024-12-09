@@ -162,6 +162,13 @@ def evaluation(data, model_nm, tokenizer, model, generation_config, device) :
         for key, value in inputs.items():
             print(f"{key}: {value.device}")
 
+        for name, param in model.named_parameters():
+            print(f"Parameter: {name} - {param.device}")
+
+        for name, buffer in model.named_buffers():
+            print(f"Buffer: {name} - {buffer.device}")
+
+
         input_ids = inputs['input_ids'].to(device)
         
         res = []
