@@ -159,8 +159,8 @@ def evaluation(data, model_nm, tokenizer, model, generation_config, device) :
         inputs = generate_prompt({**cur, "output": ""})
         inputs = tokenizer(inputs, return_tensors="pt")
         inputs = {key: value.to(device) for key, value in inputs.items()}
-        if 'position_ids' not in inputs:
-            inputs['position_ids'] = torch.arange(inputs['input_ids'].size(1), device=device).unsqueeze(0)
+        for key, value in inputs.items():
+            print(f"{key}: {value.device}")
 
         input_ids = inputs['input_ids'].to(device)
         
