@@ -17,9 +17,9 @@ def main(model_name="final_model",
         lora_checkpoint=None, 
         prefix_config=None,
         data_path="train_data_copy.json",
-        temperature=0.1,
+        temperature=0.5,
         top_p=0.75,
-        top_k=40,
+        top_k=50,
         num_beams=10,
         max_new_tokens=128
         ) :
@@ -38,11 +38,12 @@ def main(model_name="final_model",
             torch_dtype=torch.float16,
         )
     else : 
+        base_model = "yahma/llama-7b-hf"
             # Base 모델과 토크나이저 로드
         model = LlamaForCausalLM.from_pretrained(
-            model_name, 
+            base_model, 
             torch_dtype=torch.float16)
-        tokenizer = LlamaTokenizer.from_pretrained(model_name)
+        tokenizer = LlamaTokenizer.from_pretrained(base_model)
         tokenizer.pad_token = tokenizer.eos_token
 
         # Prefix Tuning Config 로드
@@ -124,7 +125,7 @@ def predict(
 
 def generate_prompt(instruction, input=None):
     if input:
-        return f"""Below is an instruction that describes a task, paired with an input that provides further context. Write a response that appropriately completes the request.  # noqa: E501
+        return f"""Below is an instruction that describes a task, paired with an input that provides further context. Write a response that appropriately completes the request.
 
 ### Instruction:
 {instruction}
@@ -135,7 +136,7 @@ def generate_prompt(instruction, input=None):
 ### Response:
 """
     else:
-        return f"""Below is an instruction that describes a task. Write a response that appropriately completes the request.  # noqa: E501
+        return f"""Below is an instruction that describes a task. Write a response that appropriately completes the request.
 
 ### Instruction:
 {instruction}
