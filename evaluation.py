@@ -11,7 +11,7 @@ from datasets import load_dataset
 ACCESS_TOKEN = "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"
 
 device = torch.device("cuda:0") if torch.cuda.is_available() else torch.device("cpu")
-
+torch.cuda.set_device(device)
 
 def main(model_name="final_model", 
         lora_checkpoint=None, 
@@ -163,9 +163,6 @@ def evaluation(data, model_nm, tokenizer, model, generation_config, device) :
             inputs['position_ids'] = torch.arange(inputs['input_ids'].size(1), device=device).unsqueeze(0)
 
         input_ids = inputs['input_ids'].to(device)
-
-        for name, param in model.named_parameters():
-            assert param.device == device, f"Parameter {name} is on {param.device}"
         
         res = []
         print(device)
