@@ -38,12 +38,11 @@ def main(model_name="final_model",
             torch_dtype=torch.float16,
         )
     else : 
-        base_model = "yahma/llama-7b-hf"
             # Base 모델과 토크나이저 로드
         model = LlamaForCausalLM.from_pretrained(
-            base_model, 
+            model_name, 
             torch_dtype=torch.float16)
-        tokenizer = LlamaTokenizer.from_pretrained(base_model)
+        tokenizer = LlamaTokenizer.from_pretrained(model_name)
         tokenizer.pad_token = tokenizer.eos_token
 
         # Prefix Tuning Config 로드
