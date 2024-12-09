@@ -18,7 +18,7 @@ def main(model_name="final_model",
         prefix_config=None,
         data_path="train_data_copy.json",
         temperature=0.7,
-        top_p=0.75,
+        top_p=0.95,
         top_k=50,
         num_beams=10,
         max_new_tokens=128
@@ -43,7 +43,7 @@ def main(model_name="final_model",
         model = LlamaForCausalLM.from_pretrained(
             base_model, 
             torch_dtype=torch.float16)
-        tokenizer = AutoTokenizer.from_pretrained(base_model, tokenizer_class=LlamaTokenizer)
+        tokenizer = LlamaTokenizer.from_pretrained(base_model)
         tokenizer.pad_token = tokenizer.eos_token
 
         # Prefix Tuning Config 로드
