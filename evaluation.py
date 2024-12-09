@@ -174,8 +174,8 @@ def evaluation(data, model_nm, tokenizer, model, generation_config, device, num_
         
         res = []
         print(device)
-        print("Input IDs device:", inputs["input_ids"].device)
-        print("Model device:", next(model.parameters()).device)
+        # print("Input IDs device:", inputs["input_ids"].device)
+        # print("Model device:", next(model.parameters()).device)
 
         with torch.no_grad():
             generation_output = model.generate(
