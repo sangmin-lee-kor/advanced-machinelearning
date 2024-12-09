@@ -12,7 +12,7 @@ ACCESS_TOKEN = "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"
 
 # device = torch.device("cuda:0") if torch.cuda.is_available() else torch.device("cpu")
 device = torch.device("cpu")
-torch.cuda.set_device(device)
+# torch.cuda.set_device(device)
 
 def main(model_name="final_model", 
         lora_checkpoint=None, 
