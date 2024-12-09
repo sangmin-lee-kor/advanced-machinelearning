@@ -163,6 +163,9 @@ def evaluation(data, model_nm, tokenizer, model, generation_config, device) :
             inputs['position_ids'] = torch.arange(inputs['input_ids'].size(1), device=device).unsqueeze(0)
 
         input_ids = inputs['input_ids'].to(device)
+
+        for name, param in model.named_parameters():
+            assert param.device == device, f"Parameter {name} is on {param.device}"
         
         res = []
         print(device)
