@@ -158,6 +158,7 @@ def evaluation(data, model_nm, tokenizer, model, generation_config, device) :
         label = cur['output']
         inputs = generate_prompt({**cur, "output": ""})
         inputs = tokenizer(inputs, return_tensors="pt")
+        inputs = {key: value.to(device) for key, value in inputs.items()}
         input_ids = inputs['input_ids'].to(device)
         
         res = []
