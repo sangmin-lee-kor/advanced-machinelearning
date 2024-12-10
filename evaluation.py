@@ -76,7 +76,9 @@ def main(model_name="final_model",
 
     data = load_dataset("json", data_files=data_path)
 
-    evaluation(data, model_name, tokenizer, model, generation_config, device, num_beams)
+    res = evaluation(data, model_name, tokenizer, model, generation_config, device, num_beams)
+
+    return res
 
 def predict(
         instruction,
